@@ -14,10 +14,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/get-items', [\App\Http\Controllers\ApiController::class, 'getItems']);
-Route::get('/get-item/{id}', [\App\Http\Controllers\ApiController::class, 'getItem']);
-Route::put('/update-items/{id}', [\App\Http\Controllers\ApiController::class, 'updateItems']);
+
+Route::post('/login', [\App\Http\Controllers\Auth\ApiAuthController::class, 'login']);
+Route::post('/register',[\App\Http\Controllers\Auth\ApiAuthController::class, 'register']);
+
+Route::group(['middleware' => 'auth:api'], function () {
+    Route::get('test-auth', function () {
+        return 'Authorized';
+    });
+});
